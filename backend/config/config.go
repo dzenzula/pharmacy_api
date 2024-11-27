@@ -10,8 +10,9 @@ import (
 )
 
 var DB *gorm.DB
+var PHDB *gorm.DB
 
-func InitDB() {
+func InitAuthDB() {
 	var err error
 	DB, err = gorm.Open(sqlite.Open("pharmacy_auth_database.db"), &gorm.Config{})
 	if err != nil {

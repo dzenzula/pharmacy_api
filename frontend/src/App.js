@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
-import Table1 from './components/tables/Table1';
-import Table2 from './components/tables/Table2';
-import Table3 from './components/tables/Table3';
-import Table4 from './components/tables/Table4';
+import DrugsTable from './components/tables/DrugsTable';
+import ManufacturersTable from './components/tables/ManufacturersTable';
+import ShipmentsTable from './components/tables/ShipmentsTable';
+import './App.css'
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const storedAuth = localStorage.getItem('isAuthenticated');
+        if (storedAuth) {
+            setIsAuthenticated(true);
+        }
+    }, []);
 
     return (
         <Router>
@@ -24,10 +31,9 @@ const App = () => {
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/table1" element={<Table1 />} />
-                        <Route path="/table2" element={<Table2 />} />
-                        <Route path="/table3" element={<Table3 />} />
-                        <Route path="/table4" element={<Table4 />} />
+                        <Route path="/drugs" element={<DrugsTable />} />
+                        <Route path="/manufacturers" element={<ManufacturersTable />} />
+                        <Route path="/shipments" element={<ShipmentsTable />} />
                     </Routes>
                 </div>
             </div>
@@ -37,11 +43,13 @@ const App = () => {
 
 const styles = {
     main: {
-        display: 'flex'
+        display: 'flex',
+        height: '100%',
     },
     content: {
         flex: 1,
-        padding: '20px'
+        padding: '20px',
+        overflow: 'hidden',
     }
 };
 

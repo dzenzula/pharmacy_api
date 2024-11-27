@@ -9,18 +9,9 @@ const Sidebar = ({ isAuthenticated }) => {
             <ul style={styles.list}>
                 {isAuthenticated && (
                     <>
-                        <li>
-                            <Link to="/table1" style={location.pathname === '/table1' ? styles.linkActive : styles.link}>Test1</Link>
-                        </li>
-                        <li>
-                            <Link to="/table2" style={location.pathname === '/table2' ? styles.linkActive : styles.link}>Test2</Link>
-                        </li>
-                        <li>
-                            <Link to="/table3" style={location.pathname === '/table3' ? styles.linkActive : styles.link}>Test3</Link>
-                        </li>
-                        <li>
-                            <Link to="/table4" style={location.pathname === '/table4' ? styles.linkActive : styles.link}>Test4</Link>
-                        </li>
+                        <li><Link to="/drugs" style={location.pathname === '/drugs' ? styles.linkActive : styles.link}>Drugs</Link></li>
+                        <li><Link to="/manufacturers" style={location.pathname === '/manufacturers' ? styles.linkActive : styles.link}>Manufacturers</Link></li>
+                        <li><Link to="/shipments" style={location.pathname === '/shipments' ? styles.linkActive : styles.link}>Shipments</Link></li>
                     </>
                 )}
             </ul>

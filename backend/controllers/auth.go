@@ -90,7 +90,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	expirationTime := time.Now().Add(24 * time.Hour)
+	expirationTime := time.Now().Add(time.Hour * 72)
 	claims := &Claims{
 		Username: creds.Username,
 		StandardClaims: jwt.StandardClaims{

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
@@ -9,6 +9,15 @@ const Header = ({ setIsAuthenticated }) => {
     const [showLogin, setShowLogin] = useState(false); // Управление отображением формы входа
     const [showRegister, setShowRegister] = useState(false); // Управление отображением формы регистрации
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const storedAuth = localStorage.getItem('isAuthenticated');
+        if (storedAuth) {
+            setIsAuthenticatedLocal(true);
+            setIsAuthenticated(true);
+            setUsername(localStorage.getItem('username'));
+        }
+    }, [setIsAuthenticated]);
 
     const handleOpenLogin = () => {
         setShowLogin(true);
@@ -29,6 +38,8 @@ const Header = ({ setIsAuthenticated }) => {
         setIsAuthenticatedLocal(true);
         setIsAuthenticated(true);
         setUsername(user.username);
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('username', user.username);
         handleClose();
         navigate('/dashboard');
     };
@@ -37,6 +48,8 @@ const Header = ({ setIsAuthenticated }) => {
         setIsAuthenticatedLocal(true);
         setIsAuthenticated(true);
         setUsername(user.username);
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('username', user.username);
         handleClose();
         navigate('/dashboard');
     };
@@ -45,6 +58,8 @@ const Header = ({ setIsAuthenticated }) => {
         setIsAuthenticatedLocal(false);
         setIsAuthenticated(false);
         setUsername('');
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('username');
         navigate('/');
     };
 
