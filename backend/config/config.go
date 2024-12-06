@@ -9,8 +9,16 @@ import (
 	"gorm.io/gorm"
 )
 
+type DBConfig struct {
+	DSN string
+}
+
+var dbConfigs = map[string]DBConfig{
+	"authConnection": {DSN: "sqlserver://admin:admin@localhost:1434?database=Auth"},
+	"pharConnection": {DSN: "sqlserver://admin:admin@localhost:1434?database=PHARMACY"},
+}
+
 var DB *gorm.DB
-var PHDB *gorm.DB
 
 func InitAuthDB() {
 	var err error

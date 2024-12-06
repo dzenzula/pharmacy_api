@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var jwtKey = []byte("your_secret_key")
+var jwtKey = []byte("jwtkey")
 
 type Claims struct {
 	Username string `json:"username"`

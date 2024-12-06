@@ -4,14 +4,16 @@ import { Link, useLocation } from 'react-router-dom';
 const Sidebar = ({ isAuthenticated }) => {
     const location = useLocation();
 
+    const hasManufacturerRole = localStorage.getItem('role') === 'manufacturer'
+
     return (
         <div style={styles.sidebar}>
             <ul style={styles.list}>
                 {isAuthenticated && (
                     <>
                         <li><Link to="/drugs" style={location.pathname === '/drugs' ? styles.linkActive : styles.link}>Drugs</Link></li>
-                        <li><Link to="/manufacturers" style={location.pathname === '/manufacturers' ? styles.linkActive : styles.link}>Manufacturers</Link></li>
-                        <li><Link to="/shipments" style={location.pathname === '/shipments' ? styles.linkActive : styles.link}>Shipments</Link></li>
+                        <li><Link to="/warehouse" style={location.pathname === '/warehouse' ? styles.linkActive : styles.link}>Warehouse</Link></li>
+                        {!hasManufacturerRole && <li><Link to="/shipments" style={location.pathname === '/shipments' ? styles.linkActive : styles.link}>Shipments</Link></li>}
                     </>
                 )}
             </ul>

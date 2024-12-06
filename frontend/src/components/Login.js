@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { loginUser } from './AuthApi';
 
 const Login = ({ onLoginSuccess }) => {
     const [username, setUsername] = useState('');
@@ -8,17 +8,23 @@ const Login = ({ onLoginSuccess }) => {
 
     const handleLogin = async () => {
         try {
-            await axios.post('http://localhost:3000/login', {
-                username,
-                password
-            });
-            const user = { username };
+            const response = await loginUser(username, password);
+            
+            const { token, user } = response.data;
+
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('username', user.Username);
+            localStorage.setItem('role', user.Role.RoleName);
+
             onLoginSuccess(user);
+            console.log("Saved token:", localStorage.getItem('token'));
+            console.log("Saved user:", JSON.parse(localStorage.getItem('user')));
         } catch (error) {
             if (error.response && error.response.data) {
-                setError(error.response.data);
+                setError(error.response.data.error || 'Login error');
             } else {
-                setError('Login error: ' + error);
+                setError('Login error: ' + error.message);
             }
         }
     };

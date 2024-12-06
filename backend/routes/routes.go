@@ -10,10 +10,14 @@ import (
 func SetupRoutes(r *gin.Engine) {
 	r.POST("/register", controllers.Register)
 	r.POST("/login", controllers.Login)
+	r.GET("/roles", controllers.GetRoles)
+	r.GET("/manufacturers", controllers.GetManufacturers)
 
 	protected := r.Group("/pharmacy")
 	protected.Use(middleware.AuthMiddleware())
 	{
+		protected.POST("/proceed-qr", controllers.ProcessQRCode)
+
 		// Drugs
 		protected.POST("/drugs", controllers.CreateDrug)
 		protected.GET("/drugs", controllers.GetDrugs)
@@ -55,5 +59,11 @@ func SetupRoutes(r *gin.Engine) {
 		protected.GET("/drug-types", controllers.GetDrugTypes)
 		protected.PUT("/drug-types/:id", controllers.UpdateDrugType)
 		protected.DELETE("/drug-types/:id", controllers.DeleteDrugType)
+
+		// Warehouse
+		protected.POST("/warehouse", controllers.CreateWarehouse)
+		protected.GET("/warehouse", controllers.GetWarehouses)
+		protected.PUT("/warehouse/:id", controllers.UpdateWarehouse)
+		protected.DELETE("/warehouse/:id", controllers.DeleteWarehouse)
 	}
 }

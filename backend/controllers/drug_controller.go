@@ -23,7 +23,7 @@ func CreateDrug(c *gin.Context) {
 
 func GetDrugs(c *gin.Context) {
 	var drugs []models.Drug
-	if err := database.DB.Find(&drugs).Error; err != nil {
+	if err := database.DB.Preload("Type").Preload("Form").Preload("Manufacturer").Find(&drugs).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch drugs"})
 		return
 	}

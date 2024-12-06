@@ -6,109 +6,130 @@ import Register from './Register';
 const Header = ({ setIsAuthenticated }) => {
     const [isAuthenticatedLocal, setIsAuthenticatedLocal] = useState(false);
     const [username, setUsername] = useState('');
-    const [showLogin, setShowLogin] = useState(false); // Управление отображением формы входа
-    const [showRegister, setShowRegister] = useState(false); // Управление отображением формы регистрации
+    const [permissions, setPermissions] = useState([]);
+    const [role, setRole] = useState('');
+    const [showLogin, setShowLogin] = useState(false);
+    const [showRegister, setShowRegister] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         const storedAuth = localStorage.getItem('isAuthenticated');
-        if (storedAuth) {
+        if (storedAuth === 'true') {
             setIsAuthenticatedLocal(true);
             setIsAuthenticated(true);
-            setUsername(localStorage.getItem('username'));
+    
+            const storedUsername = localStorage.getItem('username');
+            setUsername(storedUsername || '');
+    
+            const storedPermissions = localStorage.getItem('permissions');
+            setPermissions(storedPermissions);
+    
+            const storedRole = localStorage.getItem('role');
+            setRole(storedRole || '');
         }
     }, [setIsAuthenticated]);
 
     const handleOpenLogin = () => {
         setShowLogin(true);
-        setShowRegister(false); // Закрываем форму регистрации, если открыта
+        setShowRegister(false);
     };
 
     const handleOpenRegister = () => {
         setShowRegister(true);
-        setShowLogin(false); // Закрываем форму входа, если открыта
+        setShowLogin(false);
     };
 
-    const handleClose = () => {
+    const handleLoginClose = () => {
         setShowLogin(false);
-        setShowRegister(false);
     };
+
+    const handleRegisterClose = () => {
+        setShowRegister(false);
+    }
 
     const handleLoginSuccess = (user) => {
+        const permissions = user.Role.Permissions.map(permission => permission.PermissionName);
         setIsAuthenticatedLocal(true);
         setIsAuthenticated(true);
-        setUsername(user.username);
+        setUsername(user.Username);
+        setPermissions(permissions);
+        setRole(user.Role.RoleName);
+
         localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('username', user.username);
-        handleClose();
+        localStorage.setItem('username', user.Username);
+        localStorage.setItem('permissions', permissions);
+        localStorage.setItem('role', user.Role.RoleName);
+    
+        handleLoginClose();
         navigate('/dashboard');
     };
 
-    const handleRegisterSuccess = (user) => {
-        setIsAuthenticatedLocal(true);
-        setIsAuthenticated(true);
-        setUsername(user.username);
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('username', user.username);
-        handleClose();
-        navigate('/dashboard');
+    const handleRegisterSuccess = () => {
+        handleRegisterClose();
+        setShowRegister(false);
     };
 
     const handleLogout = () => {
         setIsAuthenticatedLocal(false);
         setIsAuthenticated(false);
         setUsername('');
+        setPermissions([]);
+        setRole('');
+
+        localStorage.removeItem('token');
         localStorage.removeItem('isAuthenticated');
         localStorage.removeItem('username');
+        localStorage.removeItem('user');
+        localStorage.removeItem('permissions');
+        localStorage.removeItem('role');
+
         navigate('/');
     };
 
-    return (
-        <div style={styles.header}>
-            <h2>Pharmacy Site</h2>
-            <div>
-                {isAuthenticatedLocal ? (
-                    <>
-                        <span>{username}</span>
-                        <button style={styles.button} onClick={handleLogout}>
-                            Logout
-                        </button>
-                    </>
-                ) : (
-                    <>
-                        <button style={styles.button} onClick={handleOpenLogin}>
-                            Login
-                        </button>
-                        <button style={styles.button} onClick={handleOpenRegister}>
-                            Registration
-                        </button>
-                    </>
-                )}
-            </div>
+    const hasAddUserPermission = permissions.includes('add_user');
 
-            {/* Модальное окно для входа */}
+    return (    
+        <div style={styles.header}>
+            <h2 style={styles.siteTitle}>Pharmacy Site</h2>
             {showLogin && (
                 <div style={styles.modal}>
                     <div style={styles.modalContent}>
-                        <button style={styles.closeButton} onClick={handleClose}>
+                        <button style={styles.closeButton} onClick={handleLoginClose}>
                             &times;
                         </button>
                         <Login onLoginSuccess={handleLoginSuccess} />
                     </div>
                 </div>
             )}
-
-            {/* Модальное окно для регистрации */}
             {showRegister && (
                 <div style={styles.modal}>
                     <div style={styles.modalContent}>
-                        <button style={styles.closeButton} onClick={handleClose}>
+                        <button style={styles.closeButton} onClick={handleRegisterClose}>
                             &times;
                         </button>
                         <Register onRegisterSuccess={handleRegisterSuccess} />
                     </div>
                 </div>
             )}
+            <div style={styles.authSection}>
+                {isAuthenticatedLocal ? (
+                    <>
+                        <span style={styles.username}>{username}</span>
+                        {hasAddUserPermission && (
+                            <button style={styles.button} onClick={handleOpenRegister}>
+                                Add User
+                            </button>
+                        )}
+                        <button style={styles.button} onClick={handleLogout}>
+                            Logout
+                        </button>
+                    </>
+                ) : (
+                    <button style={styles.button} onClick={handleOpenLogin}>
+                        Login
+                    </button>
+                )}
+            </div>
         </div>
     );
 };
@@ -118,18 +139,26 @@ const styles = {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '10px 20px',
+        padding: '20px 40px',
         backgroundColor: '#f8f9fa',
-        borderBottom: '1px solid #dee2e6'
+        borderBottom: '2px solid #dee2e6',
+        fontFamily: "'Roboto', sans-serif"
+    },
+    siteTitle: {
+        fontFamily: "'Lobster', cursive", // Custom font for title
+        fontSize: '2rem',
+        color: '#007bff',
+        margin: 0
     },
     button: {
         marginLeft: '10px',
-        padding: '5px 10px',
+        padding: '8px 15px',
         cursor: 'pointer',
         backgroundColor: '#007bff',
         color: '#fff',
         border: 'none',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        fontWeight: 'bold'
     },
     modal: {
         position: 'fixed',
@@ -161,6 +190,16 @@ const styles = {
         fontSize: '20px',
         cursor: 'pointer',
         color: '#007bff'
+    },
+    authSection: {
+        display: 'flex',
+        alignItems: 'center'
+    },
+    username: {
+        fontWeight: 'bold',
+        marginRight: '15px',
+        fontSize: '1.2rem',
+        color: '#28a745'
     }
 };
 

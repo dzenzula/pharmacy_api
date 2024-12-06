@@ -6,9 +6,9 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import DrugsTable from './components/tables/DrugsTable';
-import ManufacturersTable from './components/tables/ManufacturersTable';
 import ShipmentsTable from './components/tables/ShipmentsTable';
 import './App.css'
+import WarhouseTable from './components/tables/WarehouseTable';
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,8 +32,8 @@ const App = () => {
                         <Route path="/register" element={<Register />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/drugs" element={<DrugsTable />} />
-                        <Route path="/manufacturers" element={<ManufacturersTable />} />
                         <Route path="/shipments" element={<ShipmentsTable />} />
+                        <Route path="/warehouse" element={<WarhouseTable />} />
                     </Routes>
                 </div>
             </div>

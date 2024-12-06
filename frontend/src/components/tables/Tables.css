@@ -1,6 +1,7 @@
 /* tables.css */
 .table-container {
-    margin-top: 20px;
+    width: 100%;
+    margin: 20px 0 0 -20px;
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
@@ -13,6 +14,7 @@
 }
 
 .scrollable-table {
+    width: 100%;
     overflow: auto;
     max-height: 80vh;
     border: 1px solid #ddd;
@@ -22,7 +24,7 @@
 .table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
+    table-layout: auto;
 }
 
 .th, .td {
@@ -35,4 +37,84 @@
 .th {
     background-color: #007bff;
     color: #fff;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.add-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 4px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 100px;
+    margin-right: 10px;
+}
+
+.add-button:hover {
+    background-color: #0056b3;
+}
+
+.details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+}
+
+.details-table th, .details-table td {
+    border: 1px solid #ccc;
+    padding: 0.25rem;
+    text-align: left;
+    font-size: 0.8rem;
+}
+
+.details-table th {
+    background-color: #007bff;
+}
+
+.details-table td input {
+    border: none;
+    width: 100%;
+    background: transparent;
+    font-size: 0.8rem;
+}
+
+.search-container {
+    margin-bottom: 10px;
+    text-align: right;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.search-input {
+    padding: 8px 30px 8px 8px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #888;
+    pointer-events: none;
 }
